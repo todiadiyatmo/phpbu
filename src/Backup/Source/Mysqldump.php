@@ -100,12 +100,11 @@ class Mysqldump extends Cli implements Source
 
     /**
      *
-     * Lock tables option
-     * --lock-tables
+     * Extra mysqldump command
      *
-     * @var bool
+     * @var string
      */
-    private $lockTables;
+    private $extraCommand;
 
     /**
      * Use mysqldump with compression
@@ -155,7 +154,7 @@ class Mysqldump extends Cli implements Source
     public function setup(array $conf = array())
     {
         $this->setupSourceData($conf);
-
+        
         $this->pathToMysqldump = Util\Arr::getValue($conf, 'pathToMysqldump');
         $this->host            = Util\Arr::getValue($conf, 'host');
         $this->user            = Util\Arr::getValue($conf, 'user');
@@ -163,7 +162,7 @@ class Mysqldump extends Cli implements Source
         $this->showStdErr      = Util\Str::toBoolean(Util\Arr::getValue($conf, 'showStdErr', ''), false);
         $this->hexBlob         = Util\Str::toBoolean(Util\Arr::getValue($conf, 'hexBlob', ''), false);
         $this->quick           = Util\Str::toBoolean(Util\Arr::getValue($conf, 'quick', ''), false);
-        $this->lockTables      = Util\Str::toBoolean(Util\Arr::getValue($conf, 'lockTables', ''), false);
+        $this->extraCommand    = Util\Arr::getValue($conf, 'extraCommand',false);
         $this->compress        = Util\Str::toBoolean(Util\Arr::getValue($conf, 'compress', ''), false);
         $this->extendedInsert  = Util\Str::toBoolean(Util\Arr::getValue($conf, 'extendedInsert', ''), false);
         $this->noData          = Util\Str::toBoolean(Util\Arr::getValue($conf, 'noData', ''), false);
@@ -219,7 +218,7 @@ class Mysqldump extends Cli implements Source
             $this->executable->credentials($this->user, $this->password)
                              ->useHost($this->host)
                              ->useQuickMode($this->quick)
-                             ->lockTables($this->lockTables)
+                             ->extraCommand($this->extraCommand)
                              ->dumpBlobsHexadecimal($this->hexBlob)
                              ->useCompression($this->compress)
                              ->useExtendedInsert($this->extendedInsert)

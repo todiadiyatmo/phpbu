@@ -82,12 +82,11 @@ class Mysqldump extends Abstraction implements Executable
 
     /**
      *
-     * Lock tables option
-     * --lock-tables
+     * Extra mysql command
      *
-     * @var bool
+     * @var string
      */
-    private $lockTables;
+    private $extraCommand;
 
     /**
      * Use mysqldump with compression
@@ -178,14 +177,14 @@ class Mysqldump extends Abstraction implements Executable
     }
 
     /**
-     * Use '--lock-tables' option.
+     * Extra mysql command.
      *
-     * @param  boolean $bool
+     * @param  string $string
      * @return \phpbu\App\Cli\Executable\Mysqldump
      */
-    public function lockTables($bool)
+    public function extraCommand($string)
     {
-        $this->lockTables = $bool;
+        $this->extraCommand = $string;
         return $this;
     }
 
@@ -314,7 +313,7 @@ class Mysqldump extends Abstraction implements Executable
         $cmd->addOptionIfNotEmpty('--user', $this->user);
         $cmd->addOptionIfNotEmpty('--password', $this->password);
         $cmd->addOptionIfNotEmpty('--host', $this->host);
-        $cmd->addOptionIfNotEmpty('--lock-tables', $this->lockTables, false);
+        $cmd->addOptionIfNotEmpty($this->extraCommand, $this->extraCommand, false);
         $cmd->addOptionIfNotEmpty('-q', $this->quick, false);
         $cmd->addOptionIfNotEmpty('-C', $this->compress, false);
         $cmd->addOptionIfNotEmpty('-e', $this->extendedInsert, false);
